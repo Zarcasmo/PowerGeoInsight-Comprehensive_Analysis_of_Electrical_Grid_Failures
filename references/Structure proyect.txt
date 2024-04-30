@@ -1,0 +1,24 @@
+project_root/
+|-- data			  <- Aquí es donde almacenas todos los datos
+|   |-- raw/			  <- Datos sin procesar (Originales)
+|   |-- processed/		  <- Datos procesados
+|
+|--references			  <- Manuales y material explicatorio
+|   |-- structure proyect.txt	  <- Estructrua general del proyecto en archivo plano
+|   |-- requirements.txt	  <- Archivo que enumera las dependencias de tu proyecto (Replicar enviroment en otro computador)
+|
+|-- src/			  <- Código fuente
+|   |-- data/
+|   |   |-- load_data.py	  <- Funciones para cargar datos desde diversas fuentes
+|   |   |-- clean_data.py	  <- Funciones para realizar limpieza y preprocesamiento de los datos.
+|   |
+|   |-- analysis/
+|   |   |-- analysis.py		  <- Funciones para realizar el análisis de los datos.
+|   |
+|   |-- visualization/
+|       |-- generate_map.py	  <- Funciones para generar un mapa interactivo.
+|
+|-- reports/			  <- mapa en HTML.
+|
+|-- README.md			  <- Archivo markdown que proporciona información sobre el proyecto, cómo configurarlo y ejecutarlo.
+|-- Main_analisis_falla.py	  <- Script principal para ejecutar el proyecto.

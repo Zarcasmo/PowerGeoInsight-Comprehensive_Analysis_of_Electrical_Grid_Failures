@@ -1,0 +1,3 @@
+# Ignorar archivos con extensión .html
+*.html
+/data/processed/*.xlsx

@@ -1,0 +1,10 @@
+cx_Oracle==8.2.1
+numpy==1.19.5
+pandas==1.3.3
+geopandas==0.9.0
+shapely==1.7.1
+folium==0.12.1
+
+#%% Como ejecutar
+# Para instalar los paquetes requeridos ejecute en comand windows: pip install -r requirements.txt
+# Para validar la versión que tiene de una libreria usar: print(f'NumPy version: {numpy.__version__}')
