@@ -1,14 +1,15 @@
 # Análisis de fallas 
 
+
 <!-- vscode-markdown-toc -->
-* 1. [Estructura del Proyecto](#EstructuradelProyecto)
-* 2. [Instalación](#Instalacin)
-* 3. [Uso](#Uso)
-	* 3.1. [Entrada](#Entrada)
-	* 3.2. [Ejemplo](#Ejemplo)
-* 4. [Estructura del Código Fuente (src/)](#EstructuradelCdigoFuentesrc)
-* 5. [Información Adicional](#InformacinAdicional)
-* 6. [Autor](#Autor)
+* 1. [Project Structure](#ProjectStructure)
+* 2. [Installation](#Installation)
+* 3. [Usage](#Usage)
+	* 3.1. [Input](#Input)
+	* 3.2. [Example](#Example)
+* 4. [Source Code Structure (src/)](#SourceCodeStructuresrc)
+* 5. [Additional Information](#AdditionalInformation)
+* 6. [Author](#Author)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -16,220 +17,222 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
+This project focuses on identifying components that have experienced the most failures throughout a power distribution network. This is achieved by analyzing components that extend from the analysis point to the electrical substation that feeds them. To achieve this goal, a combination of data obtained from the database and SCADA system distribution event reports is employed. This information is interactively presented on a map using the Folium library.
 
-Este proyecto se enfoca en identificar los componentes que han experimentado más fallas a lo largo de una red de distribución de energía. Esto se logra analizando los componentes que se extienden desde el punto de análisis hasta la subestación eléctrica que los alimenta. Para alcanzar este objetivo, se emplea una combinación de datos obtenidos de la base de datos y reportes de eventos del SCADA del sistema de distribución. Esta información se presenta de manera interactiva en un mapa utilizando la librería Folium.
+On the generated map, size and color indicators are used to represent the events that have occurred at each circuit component. This visual representation allows for quick and intuitive identification of elements that have a significant impact on the failures perceived by the study element. It also facilitates decision-making and corrective action planning.
 
-En el mapa generado, se utilizan indicadores de tamaño y color para representar los eventos ocurridos en cada componente del circuito. Esta representación visual permite una identificación rápida e intuitiva de los elementos que tienen un impacto significativo en las fallas percibidas por el elemento de estudio. Asimismo, facilita la toma de decisiones y la planificación de acciones correctivas.
+Below is an example of the map, which shows an electrical circuit displaying the path between the substation, various switching elements, and network sections up to a transformer that ultimately feeds a particular user. On the map, the following information can be identified:
 
-A continuación, se muestra un ejemplo del mapa, donde se visualiza un circuito eléctrico que muestra la trayectoria entre la subestación, los diferentes elementos de corte y los tramos de red hasta un transformador que finalmente alimenta a un usuario en particular. En el mapa, se puede identificar la siguiente información:
+ - The pink pentagon represents the user on which the analysis is to be performed.
+ - Red square: Represents the system element that has experienced the most failures along the path.
+ - Yellow square: Represents the electrical substation.
+ - Green squares: Represent the switching elements of the system that have experienced certain failures along the path.
+ - White squares: Represent the switching elements that have not experienced any failures.
 
- - El pentágono de color rosado representa el usuario sobre el cual se quiere realizar el análisis.
- - Cuadro de color rojo: Representa el elemento del sistema que ha experimentado más fallas en la trayectoria.
- -  Cuadro de color amarillo: Representa la subestación eléctrica.
- - Cuadros de color verde: Representan los elementos de corte del sistema que han presentado ciertas fallas en la trayectoria.
- - Cuadros de color blanco: Representan los elementos de corte que no han experimentado ninguna falla.
+**Figure 1:** Example Map Visualization
+    ![Alt text](references/Media/mapa_html.PNG)
 
-
-### Figura 1: Ejemplo de visualización del mapa
-![Alt text](references/Media/mapa_html.PNG)
-
-##  1. <a name='EstructuradelProyecto'></a>Estructura del Proyecto
-1. **project_root**: Directorio principal del proyecto.
-    - **data**: Contiene los conjuntos de datos.
+##  1. <a name='ProjectStructure'></a>Project Structure
+1. **project_root**: Main directory of the project.
+    - **data**: Contains data sets.
         - **raw**: Datos sin procesar (Originales).
-        - **processed**: Datos procesados.
-    - **references**: Manuales y material explicatorio.
-        - **structure proyect**: Estructrua general del proyecto en archivo plano.
-        - **requirements.txt:**: Lista de dependencias del proyecto, .py que permite instalar las librerias en la versión adecuada para ejecutar el proyecto de manera adecuada.
-    - **src**: Código fuente del proyecto.
-        - `Main_analisis_falla.py:` Script principal para ejecutar el proyecto.
+    - **references**: Manuals and explanatory material.
+        - **structure proyect**: General project structure in plain text file.
+        - **requirements.txt:**: List of project dependencies, it's a .py file that allows installing libraries in the appropriate version to run the project properly.
+    - **src**: Source code of the project.
+        - `Main_analisis_falla.py:` Main script to execute the project.
         - **data** 
-            - `load_data.py`: Funciones para cargar datos desde diversas fuentes.
-            - `clean_data.py`: Funciones para realizar limpieza y preprocesamiento de los datos.
+            - `load_data.py`: Functions to load data from various sources.
+            - `clean_data.py`: Functions to perform data cleaning and preprocessing.
         - **analysis**
-            - `analysis.py`: Funciones para realizar el analisis de los datos.
+            - `analysis.py`: Functions to perform data analysis.
         - **visualization**
-            - `generate_map.py`: Funciones para generar un mapa interactivo
-    - **reports:** mapa en HTML.
-    - **README.md:** Documentación principal del proyecto.
+            - `generate_map.py`: Functions to generate an interactive map.
+    - **reports:** HTML map and Excel reports.
+    - **README.md:** Main project documentation in english.
+    - **README_ES.md:** Main project documentation in spanish.
 
 
-##  2. <a name='Instalacin'></a>Instalación
-Para comenzar a utilizar este proyecto, sigue estos pasos:
+##  2. <a name='Installation'></a>Installation
 
-1. **Clona el repositorio:**
-   - Ejecuta el siguiente comando para clonar el repositorio desde GitHub:
+To start using this project, follow these steps::
+
+1. **Clone the repository:**
+   - Run the following command to clone the repository from GitHub:
      ```bash
      git clone https://github.com/Zarcasmo/PowerGeoInsight-Comprehensive_Analysis_of_Electrical_Grid_Failures.git
      ```
-2. **Ve al directorio del proyecto:**
-   - Utiliza el comando `cd` para navegar hasta el directorio recién clonado:
+2. **Navigate to the project directory:**
+   - Use the `cd` command to navigate to the newly cloned directory:
      ```bash
      cd PowerGeoInsight-Comprehensive_Analysis_of_Electrical_Grid_Failures
      ```
-3. **Crea un nuevo ambiente de trabajo:**
-   - Se recomienda crear un nuevo entorno de trabajo para este proyecto para evitar conflictos con las dependencias de otros proyectos. Puedes crear un nuevo entorno usando virtualenv o conda:
-     - Con virtualenv:
+3. **Create a new working environment:**
+   - It is recommended to create a new working environment for this project to avoid conflicts with dependencies from other projects. You can create a new environment using virtualenv or conda:
+     - With virtualenv:
        ```bash
        virtualenv nombre_del_entorno
        ```
-     - Con conda:
+     - With conda:
        ```bash
        conda create --name nombre_del_entorno
        ```
-4. **Activa el ambiente de trabajo:**
-   - Una vez que se haya creado el ambiente, actívalo utilizando el siguiente comando:
-     - Para virtualenv:
+4. **Activate the working environment:**
+   - Once the environment is created, activate it using the following command:
+     - For virtualenv:
        ```bash
        source nombre_del_entorno/bin/activate
        ```
-     - Para conda:
+     - For conda:
        ```bash
        conda activate nombre_del_entorno
        ```       
-5. **Instala las dependencias:**
-   - Ejecuta el siguiente comando para instalar las dependencias del proyecto utilizando pip y el archivo requirements.txt:
+5. **Install dependencies:**
+   - Run the following command to install project dependencies using pip and the requirements.txt file:
      ```bash
      pip install -r requirements.txt
      ```
 
-##  3. <a name='Uso'></a>Uso
-###  3.1. <a name='Entrada'></a>Entrada
-- **`Entrada por consola`**
-  1. Ejecutar el script principal `Main_analisis_falla.py` 
-  2. Ahora se le pide que ingrese un valor.
+##  3. <a name='Usage'></a>Usage
+###  3.1. <a name='Input'></a>Input
+- **`Console Input`**
+  1. Run the main script `Main_analisis_falla.py`. 
+  2. Now, you are prompted to enter a value.
         ```python
-        Ingrese un valor: 
+        Enter a value: 
         ```    
-  3. Puede ingresar un solo valor.
-     - Entrada tipo transformador.
+  3. You can enter a single value.
+     - Transformer type input.
         ```python
-        Ingrese un valor: CARQ0122
-        Procesando un solo valor: CARQ0122
+        Enter a value: CARQ0122
+        Processing a single value: CARQ0122
         ``` 
-        Despues de ingresar el código le mostrará un mensaje indicando que se esta porcesando un solo valor. 
+        After entering the code, it will display a message indicating that a single value is being processed.
 
-     - Entrada tipo elemento de corte.
+     - Switching element type input.
         ```python
-        Ingrese un valor: S-1169
-        Procesando un solo valor: S-1169
+        Enter a value: S-1169
+        Processing a single value: S-1169
         ```  
-        Despues de ingresar el código le mostrará un mensaje indicando que se esta porcesando un solo valor.
+        After entering the code, it will display a message indicating that a single value is being processed.
 
-     - Entrada tipo usuario.
+     - User type input.
         ```python
-        Ingrese un valor: 310602
-        Procesando un solo valor: 310602
+        Enter a value: 310602
+        Processing a single value: 310602
         ```  
-        Despues de ingresar el NIU de un usaurio le mostrará un mensaje indicando que se esta porcesando un solo valor.
-   4. Puede ingresar una lista de valores.
+        After entering the ID of a user, it will display a message indicating that a single value is being processed.
+   4. You can enter a list of values.
         ```python
-        Ingrese un valor: CARQ0122,S-1169,310602
-        Procesando lista de valores: ['CARQ0122', 'S-1169', '310602']
+        Enter a value: CARQ0122,S-1169,310602
+        Processing list_ of values: ['CARQ0122', 'S-1169', '310602']
         ```    
 
-- **`Lectura de archivo xlsx`**
 
-  Para que la entrada sea el archivo de excel debe tener en cuenta las siguientes consideraciones.
+- **`Reading xlsx file`**
 
-  1. Actualizar el archivo de entrada, el cual se encuentra en la ruta `data/raw/entrada.xlsx`. 
-  2. El archivo debe tener una sola columna con un encabezado 'TRANSFORMADOR'.
+  For the input to be the Excel file, you must take into account the following considerations.
+
+  1. Update the input file, which is located in the path `data/raw/entrada.xlsx`.
+  2. The file must have a single column with a 'TRANSFORMER' header.
 
         ![Alt text](references/Media/entrada2_excel.PNG)
 
-        **Nota:** Aunque la columna se llama 'TRANSFORMADOR' puede ingresar diferentes tipos de elementos.
+        **Note:** Although the column is called 'TRANSFORMER' you can enter different types of elements.
   
-  3. Cuando ejecute el script principal, no ingrese valores y pulse **Enter**.
+  3. When you run the main script, do not enter values ​​and press **Enter**.
         ```python
-        Ingrese un valor: 
-        Procesando un archivo excel
-        ```     
+        Enter a value:
+        Processing an excel file
+        ```
 
-###  3.2. <a name='Ejemplo'></a>Ejemplo
-- **`Entrada:`** Se tiene un conjunto de transformadores en un archivo xlsx.
+###  3.2. <a name='Example'></a>Example
+- **`Input:`** There is a set of transformers in an xlsx file.
 
     ![Alt text](references/Media/ejemplo1.PNG)
-- **`Ejecución:`** se ejecuta el script principal `Main_analisis_falla.py`
+- **`Execution:`** the main script  `Main_analisis_falla.py`
 
-  Como la entrada es un archivo xlsx, no debo ingresar valores en la consola
+  Since the input is an xlsx file, You should not enter values ​​in the console
 
     ```python
-    Ingrese un valor: 
-    Procesando un archivo excel
+    Enter a value:
+    Processing an excel file
     ``` 
-- **`Salida:`** 
+- **`Output:`** 
 
-  Cuando termine la ejecución se tiene como salida uno o varios mapas en html y archivos xlsx que contienen información de interés. 
+  When the execution finishes, the output will be one or more html maps and xlsx files that contain information of interest.
 
-  **documentos xlsx**
+  **xlsx documents**
 
-    Los documentos se generan en el módulo `analysis.py` y se almacenan en `data/processed`.
-  - `consulta_aperturas_filtradada.xlsx`: este documento contiene la información de los eventos de salidas totales  para todos los elementos de la trayectoria.
-  - `reporte_eventos.xlsx`: contiene los eventos obtenidos del reporteador de MAR.
-  - `eventos_funcion.xlsx`: este documento contiene los eventos obtenidos de MAR una vez se le ha aplicado la función. `filtrar_fechas` 
-  - `informacion.xlsx`: contiene la suma de las aperturas para cada uno de los elementos de la trayectoria.
+  The documents are generated in the `analysis.py` module and stored in `data/processed`.
+  - `consulta_aperturas_filtradada.xlsx`: this document contains the information on the total exit events for all the elements of the trajectory.
+  - `reporte_eventos.xlsx`: contains the events obtained from the MAR reporter.
+  - `eventos_funcion.xlsx`: this document contains the events obtained from MAR once the function has been applied to it. `filter_dates`
+  - `informacion.xlsx`: contains the sum of the openings for each of the elements of the trajectory.
 
-  **mapa html**
+  **html map**
 
-  - El mapa se genera en el módulo `generate_map.py` y se almacena en `reports`.
-  - La cantidad de mapas es igual a la cantidad de circuitos diferentes.
-  - El mapa html se vera de la siguiente manera:
+  - The map is generated in the `generate_map.py` module and stored in `reports`.
+  - The number of maps is equal to the number of different circuits.
+  - The html map will look like this:
 
-    **Figura 2:** Ejemplo de visualización de un mapa
+    **Figure  2:** Example of a map display.
     ![Alt text](references/Media/mapa_ejemplo.PNG)
 
 
-##  4. <a name='EstructuradelCdigoFuentesrc'></a>Estructura del Código Fuente (src/)
-1. **__init__.py:** Archivo de inicialización del paquete.
-   - Este archivo se utiliza para que Python reconozca las carpetas como un módulo del paquete. No contiene código específico ni funcionalidades adicionales.
+##  4. <a name='SourceCodeStructuresrc'></a>Source Code Structure (src/)
+1. **__init__.py:** Package initialization file.
 
-2. **Main_analisis_falla.py** Script principal
-   -  Este módulo sirve como punto de entrada principal para el programa de      análisis de fallas, importa funciones de los módulos analysis y data(load_data y clear_data) para procesar la entrada del usuario, filtrar datos y realizar el análisis de fallas.
-      - **obtener_entrada_usuario:** Función que solicita la entrada del usuario y devuelve el valor ingresado.
+ - This file is used to make Python recognize the folders as a module of the package. It does not contain specific code or additional functionality.
 
-3. **load_data.py** 
-   -  Este script carga datos desde diferentes fuentes, incluyendo archivos CSV y una base de datos Oracle.
-        - **procesar_entrada:** Función que procesa el valor de entrada y devuelve un DataFrame estructurado. 
-        - **Cargar datos CSV:** Este bloque de código carga datos desde archivos CSV ubicados en la carpeta `data/raw/`.
-        - **Conexión a bases de Datos:** Este bloque de código intenta establecer una conexión a una base de datos Oracle y, si la conexión falla, carga datos desde archivos CSV ubicados en la carpeta `data/raw/`.
+2. **Main_analysis_failure.py** Main script
+   - This module serves as the main entry point for the fault analysis program, importing functions from the analysis and data modules (load_data and clear_data) to process user input, filter data and perform fault analysis.
+      - **get_user_input:** Function that requests user input and returns the entered value.
 
-4. **clear_data.py:** Funciones para limpieza de datos
-   - Este script contiene funciones para limpiar y procesar datos antes de su análisis posterior.
-        - **filtrar_fechas:** Función que filtra las fechas de eventos basándose en la distribución gaussiana de las fechas de energización. 
+3. **load_data.py**
+   - This script loads data from different sources, including CSV files and an Oracle database.
+        - **process_input:** Function that processes the input value and returns a structured DataFrame.
+        - **Load CSV data:** This code block loads data from CSV files located in the `data/raw/` folder.
+        - **Connection to Databases:** This code block attempts to establish a connection to an Oracle database and, if the connection fails, loads data from CSV files located in the `data/raw/` folder.
 
-5. **analysis.py:** Funciones de análisis de fallas.
-   - Este módulo contiene la función `analisis_fallas`, la cual realiza un análisis integral de fallas en un conjunto de elementos del sistema eléctrico, utilizando información proporcionada en diversos DataFrames.
-        - **analisis_fallas:** Función que realiza el análisis de fallas en un circuito eléctrico.
-        - **buscar_valor:** Función que busca el valor de 'FID_EQUIPO_PADRE' de forma recursiva para un 'valor_funcion' dado dentro de un DataFrame 'gelemet'.
-        - **Llamado a la función buscar_valor.:** Este bloque de código llama a la función buscar_valor para buscar valores específicos en varios conjuntos de datos (usuarios, trafos_original y gelemet). El resultado de la búsqueda se almacena en la lista valores_encontrados, y se manejan errores para manejar los casos en los que los valores no se encuentran en ninguno de los conjuntos de datos.
-        - **DataFrames para graficar la trayactoria:** Este bloque de código obtiene los GeoDataFrames para los elementos asociados a los FID obtenidos con la función `buscar_valor`. 
-        - **Búsqueda y filtrado de elementos por subestación:** Este bloque de código realiza la búsqueda y filtrado de elementos relacionados con una subestación específica, identificada por los valores encontrados en la lista valores_encontrados.
-        - **Aperturas nodo-transformador:** Este bloque de código realiza un procesamiento de aperturas(nodo-trasformador) para los elementos de la red eléctrica, utilizando información de los DataFrames trafo, cortes, y consulta_aperturas.
-        - **Aperturas reporteEventos :** Este bloque de código realiza el procesamiento de aperturas y genera informes a partir de los datos de los eventos reportados y los elementos de la red eléctrica. Se llevan a cabo diversas operaciones de filtrado, combinación y cálculo para obtener estadísticas detalladas sobre las aperturas de los elementos. Finalmente, se genera un informe en formato Excel que contiene la información procesada y que se almacena en `../data/processed`.
+4. **clear_data.py:** Functions for data cleaning
+   - This script contains functions to clean and process data before further analysis.
+        - **filter_dates:** Function that filters event dates based on the Gaussian distribution of energization dates.
 
-6. **generate_map.py:** Funciones para generar mapa interactivo
-   - Este módulo proporciona funciones para generar un mapa interactivo HTML que visualiza diferentes capas de información geoespacial, como elementos de co  rte, transformadores, redes eléctricas MT y BT, usuarios, entre otros.
-        - **tipo_punto:** Función que dibuja marcadores tipo punto en un mapa interactivo. 
-        - **tipo_linea:** Función que dibuja marcadores tipo línea en un mapa interactivo.        
-        - **agregar_marcador:** Función que agrega marcadores a una capa del mapa basándose en información específica del DataFrame.
-        - **Graficar trayectoria:** Este bloque de código llama las funciones previamente definidas(`tipo_linea` y `tipo_punto`) para agregar diferentes capas de elementos a un mapa interactivo utilizando la biblioteca Folium.
-            - **Graficar red MT:**  Agrega las líneas que componen la red MT al mapa interactivo con un color específico y un grosor definido. 
-            - **Graficar elementos de corte:** Agrega marcadores de elementos de corte a la capa correspondiente del mapa interactivo con colores y tamaños específicos según el tipo de elemento.
-            - **Graficar Transformadores:** Agrega marcadores de transformadores a la capa correspondiente del mapa interactivo con un color, tamaño y forma definidos.
-            - **Graficar red BT:** Agrega las líneas que componen la red BT al mapa interactivo con un color específico y un grosor definido.
-            - **Graficar usuarios:** Agrega marcadores de usuarios a la capa correspondiente del mapa interactivo con un color, tamaño y forma definidos.
-        - **Graficar el SDL:** Este bloque de código llama las funciones `tipo_linea` y `tipo_punto` para agregar líneas del SDL, elementos de corte y transformadores a un mapa interactivo utilizando la biblioteca Folium.
-        - **Graficar por REPORTE-EVENTOS:** Este bloque de código crea tres capas en un mapa interactivo, cada una dedicada a diferentes tipos de eventos relacionados con aperturas totales y parciales.
-            - **Graficar cortes:**  Agrega marcadores para elementos de corte a tres capas diferentes en el mapa interactivo: aperturas totales, aperturas parciales nodo-transformador y aperturas parciales por eventos.
-            - **Graficar Transformadores:** Agrega marcadores para transformadores a las mismas tres capas en el mapa interactivo, con el mismo propósito de mostrar aperturas totales, aperturas parciales nodo-transformador y aperturas parciales por eventos.
-        - **mapa HTML:** Bloque de código para agregar las capas al mapa interactivo, incluir control de capas, guardar el mapa como un archivo HTML en la carpeta `../reports/` y abrirlo en el navegador web.
+5. **analysis.py:** Failure analysis functions.
+   - This module contains the function `analysis_failures`, which performs a comprehensive analysis of failures in a set of elements of the electrical system, using information provided in various DataFrames.
+        - **failure_analysis:** Function that performs failure analysis in an electrical circuit.
+        - **search_value:** Function that searches the value of 'FID_EQUIPO_PADRE' recursively for a given 'valor_funcio' within a DataFrame 'gelemet'.
+        - **Search_value function call:** This code block calls the buscar_valor function to search for specific values ​​in various data sets (usuarios, trafos_original y gelemet). The search result is stored in the found_values ​​list, and errors are handled to handle cases where the values ​​are not found in any of the data sets.
+        - **DataFrames to graph the trajectory:** This code block obtains the GeoDataFrames for the elements associated with the FIDs obtained with the `buscar_valor` function.
+        - **Search and filtering of elements by substation:** This code block performs the search and filtering of elements related to a specific substation, identified by the values ​​found in the found_values ​​list.
+        - **Transformer-node openings:** This code block performs opening processing (nodo-trasformador) for the elements of the electrical network, using information from the data frames trafo, cortes, and consulta_aperturas.
+        - **Event Report Openings:** This code block processes openings and generates reports based on the data of the reported events and the elements of the electrical network. Various filtering, combining, and calculating operations are performed to obtain detailed statistics on item openings. Finally, a report is generated in Excel format that contains the processed information and is stored in `../data/processed`.
 
 
-##  5. <a name='InformacinAdicional'></a>Información Adicional
-- [Documentación oficial de Folium](https://python-visualization.github.io/folium/)
-- [Guía de Markdown de GitHub](https://docs.github.com/es/github/writing-on-github/basic-writing-and-formatting-syntax)
+6. **generate_map.py:** Functions to generate interactive map.
+   - This module provides functions to generate an interactive HTML map that displays different layers of geospatial information, such as cutting elements, transformers, electrical networks, users, among others.
+        - **tipo_punto:** Function that draws point-type markers on an interactive map.
+        - **tipo_linea:** Function that draws line-type markers on an interactive map.
+        - **agregar_marcador:** Function that adds markers to a map layer based on specific information from the DataFrame.
+        - **Graficar trayectoria:** This code block calls the previously defined functions (`tipo_linea` and `tipo_punto`) to add different feature layers to an interactive map using the Folium library.
+            - **Graficar red MT:** Adds the lines that make up the MT network to the interactive map with a specific color and a defined thickness.
+            - **Graficar elementos de corte:** Adds cut feature markers to the corresponding layer of the interactive map with specific colors and sizes based on the feature type.
+            - **Graficar Transformadores:** Adds transformer markers to the corresponding layer of the interactive map with a defined color, size and shape.
+            - **Graficar red BT:** Adds the lines that make up the BT network to the interactive map with a specific color and a defined thickness.
+            - **Graficar usuarios:** Adds user markers to the corresponding layer of the interactive map with a defined color, size and shape.
+
+        - **Graficar el SDL:** This code block calls the `line_type` and `point_type` functions to add SDL lines, cut elements and transformers to an interactive map using the Folium library.
+        - **Graficar por REPORTE-EVENTOS:** This code block creates three layers in an interactive map, each dedicated to different types of events related to full and partial openings.
+          - **Graficar elementos de corte:** Adds markers for cut elements to three different layers on the interactive map: total openings, partial node-transformer openings and partial openings by events.
+          - **Graficar Transformadores:** Add markers for transformers to the same three layers in the interactive map, with the same purpose of showing total openings, partial node-transformer openings and partial openings by events.
+        - **Mapa HTML:** Code block to add the layers to the interactive map, include layer control, save the map as an HTML file in the `../reports/` folder and open it in the web browser.
+
+##  5. <a name='AdditionalInformation'></a>Additional Information
+- [Official Folium Documentation](https://python-visualization.github.io/folium/)
+- [GitHub Markdown Guide](https://docs.github.com/es/github/writing-on-github/basic-writing-and-formatting-syntax)
 
 
-##  6. <a name='Autor'></a>Autor
+##  6. <a name='Author'></a>Author
  - Andrea Bartolo Guarin - andrea.bartolo@utp.edu.co
  - Alejandro López Aguirre - alejo97100@utp.edu.co
