@@ -191,73 +191,42 @@ Returns
 """
 
 #Agregar un rango de fecha para filtrar la información
-
-fecha_inicial=pd.to_datetime('2023-01-01')
-fecha_final=pd.to_datetime('2024-02-22')
+fecha_inicio ='2023-01-01'
+fecha_fin = '2024-02-22'
+fecha_inicial=pd.to_datetime(fecha_inicio)
+fecha_final=pd.to_datetime(fecha_fin)
 
 try:
-    #Conexion MAR
+    #%% Conexion MAR
+    
+    # Función para leer el archivo SQL
+    def leer_query_desde_archivo(nombre_archivo):
+        with open(nombre_archivo, 'r') as archivo:
+            consulta = archivo.read()
+        return consulta
+    
     dsn_tns1=cx_Oracle.makedsn('EPM-PO35.corp.epm.com.co',1521,service_name='EPM09')
     connection=cx_Oracle.connect('DMSANALISTA','junio2009',dsn_tns1)
-    
-    """
-    
-    
-    Aquí va lo de las consultas !!!!
-    
-    """
-except cx_Oracle.DatabaseError:
-    # En caso de error de conexión, cargar datos desde archivos CSV
-    
-    # Cargar eventos desde el archivo CSV
-    eventos_csv = "../data/raw/ReporteEventos.csv"
-    # Lee las primeras filas del archivo para identificar la fila que contiene la etiqueta "Evento"
-    header_row = pd.read_csv(eventos_csv, sep=';', decimal=',', encoding='latin-1', nrows=50)  # Ajusta el número de filas según sea necesario
-    
-    # Encuentra la fila que contiene la etiqueta "Evento" en las primeras 5 columnas de manera insensible a mayúsculas y minúsculas
-    fila_evento = header_row.iloc[:, :5].apply(lambda row: any('Evento' in str(cell) for cell in row), axis=1).idxmax()
-    
-    # Usa la fila que contiene "Evento" como fila de inicio y define esa fila como encabezado
-    reporte_eventos = pd.read_csv(eventos_csv, sep=';', decimal=',', encoding='latin-1', header=fila_evento+1,low_memory=False)
-    
-    # Elimina las columnas que contienen solo valores nulos en todas las filas
-    reporte_eventos = reporte_eventos.dropna(axis=1, how='all')
-    # Se cambian los nombres de las columnas de reporte_eventos para que coincida con los de la consulta
-    reporte_eventos.rename(columns={'Fecha Real de Inicio(dd/mm/aaaa)':'FEC_REALINICIO',
-                                    'Fecha Energización(dd/mm/aaaa)':'TIE_ENERGIZACION',
-                                    'Fecha Finalización(dd/mm/aaaa)':'FEC_REALFIN',
-                                    'Causa Evento':'CAUSA_EVENTO',
-                                    'Observaciones del Evento':'OBSERVACION_EVENTO',
-                                    'Evento':'EVENTO',
-                                    'Generación':'NOM_GENERACION'},inplace=True)
-
-    #Dar formato de fechas a las columnas de interes 
-    reporte_eventos['FEC_REALINICIO'] = reporte_eventos['FEC_REALINICIO'].str[:-4]
-    reporte_eventos['FEC_REALFIN'] = reporte_eventos['FEC_REALFIN'].str[:-4]
-
-    # Asegúrate de que ambas columnas de fecha estén en formato datetime
-    reporte_eventos['FEC_REALINICIO'] = pd.to_datetime(reporte_eventos['FEC_REALINICIO'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
-    reporte_eventos['TIE_ENERGIZACION'] = pd.to_datetime(reporte_eventos['TIE_ENERGIZACION'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
-    reporte_eventos['FEC_REALFIN'] = pd.to_datetime(reporte_eventos['FEC_REALFIN'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
-    
-    # Filtra el DataFrame para incluir solo las filas dentro del rango de fechas
-    reporte_eventos =  reporte_eventos[( reporte_eventos['FEC_REALINICIO'] >= fecha_inicial) & (reporte_eventos['FEC_REALINICIO'] <= fecha_final)]
-    
-    if reporte_eventos.empty:
-        print(f"En reporte_eventos, no se tienen valores para el rango:  {fecha_inicial}  -  {fecha_final}")
         
-     # Cargar solicitudes desde el archivo CSV
-    solicitudes_csv = "../data/raw/ReporteSolicitudes.csv"
+    # Leer el query desde el archivo .sql
+    query = leer_query_desde_archivo("data//Consulta_aperturas.sql")
     
-    # Lee el archivo CSV, tomando la fila de inicio como encabezado y omitiendo las filas y columnas anteriores a la celda de inicio      
-    header_row_s = pd.read_csv(solicitudes_csv, sep=';', decimal=',', encoding='latin-1', nrows=50)  # Ajusta el número de filas según sea necesario
+    # Parámetros de las fechas
+    parametros = {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin}
     
-    # Encuentra la fila que contiene la etiqueta "Solicitud" en las primeras 5 columnas de manera insensible a mayúsculas y minúsculas
-    fila_solicitud = header_row_s.iloc[:, :5].apply(lambda row: any('Solicitud' in str(cell) for cell in row), axis=1).idxmax()
+    # Ejecutar la consulta y cargar los resultados en un DataFrame
+    consulta_aperturas = pd.read_sql_query(query, connection, params=parametros)
     
-    # Usa la fila que contiene "Solicitud" como fila de inicio y define esa fila como encabezado
-    reporte_solicitudes = pd.read_csv(solicitudes_csv, sep=';', decimal=',', encoding='latin-1', header=fila_solicitud+1).dropna(axis=1, how='all')
-    reporte_solicitudes.rename(columns={'Evento':'EVENTO'},inplace=True)
+    # Se cambian los nombres de las columnas de consulta_aperturas para que coincida con los de la consulta
+    consulta_aperturas.rename(columns={'COD_ELEMENTO':'CODIGO',
+                                       'IDE_EVENTO':'Evento'},inplace=True)
+    consulta_aperturas['DUR_H']=consulta_aperturas['DUR_H'].astype('float64')
+       
+
+    
+except cx_Oracle.DatabaseError:
+    #%% Except conexion MAR
+    # En caso de error de conexión, cargar datos desde archivos CSV
     # Cargar datos de consulta_aperturas desde el archivo CSV
     consulta_csv = "../data/raw/MAR_Consulta_aperturas.csv"      
     consulta_aperturas = pd.read_csv(consulta_csv,sep=';',decimal=',',encoding='latin-1')
@@ -267,3 +236,63 @@ except cx_Oracle.DatabaseError:
                                        'IDE_EVENTO':'Evento'},inplace=True)
     consulta_aperturas['DUR_H']=consulta_aperturas['DUR_H'].astype('float64')
    
+    
+#Informacion CSV
+    
+# Cargar eventos desde el archivo CSV
+eventos_csv = "../data/raw/ReporteEventos.csv"
+# Lee las primeras filas del archivo para identificar la fila que contiene la etiqueta "Evento"
+header_row = pd.read_csv(eventos_csv, sep=';', decimal=',', encoding='latin-1', nrows=50)  # Ajusta el número de filas según sea necesario
+
+# Encuentra la fila que contiene la etiqueta "Evento" en las primeras 5 columnas de manera insensible a mayúsculas y minúsculas
+fila_evento = header_row.iloc[:, :5].apply(lambda row: any('Evento' in str(cell) for cell in row), axis=1).idxmax()
+
+# Usa la fila que contiene "Evento" como fila de inicio y define esa fila como encabezado
+reporte_eventos = pd.read_csv(eventos_csv, sep=';', decimal=',', encoding='latin-1', header=fila_evento+1,low_memory=False)
+
+# Elimina las columnas que contienen solo valores nulos en todas las filas
+reporte_eventos = reporte_eventos.dropna(axis=1, how='all')
+# Se cambian los nombres de las columnas de reporte_eventos para que coincida con los de la consulta
+reporte_eventos.rename(columns={'Fecha Real de Inicio(dd/mm/aaaa)':'FEC_REALINICIO',
+                                'Fecha Energización(dd/mm/aaaa)':'TIE_ENERGIZACION',
+                                'Fecha Finalización(dd/mm/aaaa)':'FEC_REALFIN',
+                                'Causa Evento':'CAUSA_EVENTO',
+                                'Observaciones del Evento':'OBSERVACION_EVENTO',
+                                'Evento':'EVENTO',
+                                'Generación':'NOM_GENERACION'},inplace=True)
+
+#Dar formato de fechas a las columnas de interes 
+reporte_eventos['FEC_REALINICIO'] = reporte_eventos['FEC_REALINICIO'].str[:-4]
+reporte_eventos['FEC_REALFIN'] = reporte_eventos['FEC_REALFIN'].str[:-4]
+
+# Asegúrate de que ambas columnas de fecha estén en formato datetime
+reporte_eventos['FEC_REALINICIO'] = pd.to_datetime(reporte_eventos['FEC_REALINICIO'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
+reporte_eventos['TIE_ENERGIZACION'] = pd.to_datetime(reporte_eventos['TIE_ENERGIZACION'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
+reporte_eventos['FEC_REALFIN'] = pd.to_datetime(reporte_eventos['FEC_REALFIN'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
+
+# Filtra el DataFrame para incluir solo las filas dentro del rango de fechas
+reporte_eventos =  reporte_eventos[( reporte_eventos['FEC_REALINICIO'] >= fecha_inicial) & (reporte_eventos['FEC_REALINICIO'] <= fecha_final)]
+
+if reporte_eventos.empty:
+    print(f"En reporte_eventos, no se tienen valores para el rango:  {fecha_inicial}  -  {fecha_final}")
+    
+ # Cargar solicitudes desde el archivo CSV
+solicitudes_csv = "../data/raw/ReporteSolicitudes.csv"
+
+# Lee el archivo CSV, tomando la fila de inicio como encabezado y omitiendo las filas y columnas anteriores a la celda de inicio      
+header_row_s = pd.read_csv(solicitudes_csv, sep=';', decimal=',', encoding='latin-1', nrows=50)  # Ajusta el número de filas según sea necesario
+
+# Encuentra la fila que contiene la etiqueta "Solicitud" en las primeras 5 columnas de manera insensible a mayúsculas y minúsculas
+fila_solicitud = header_row_s.iloc[:, :5].apply(lambda row: any('Solicitud' in str(cell) for cell in row), axis=1).idxmax()
+
+# Usa la fila que contiene "Solicitud" como fila de inicio y define esa fila como encabezado
+reporte_solicitudes = pd.read_csv(solicitudes_csv, sep=';', decimal=',', encoding='latin-1', header=fila_solicitud+1).dropna(axis=1, how='all')
+reporte_solicitudes.rename(columns={'Evento':'EVENTO'},inplace=True)
+# Cargar datos de consulta_aperturas desde el archivo CSV
+consulta_csv = "../data/raw/MAR_Consulta_aperturas.csv"      
+consulta_aperturas = pd.read_csv(consulta_csv,sep=';',decimal=',',encoding='latin-1')
+
+# Se cambian los nombres de las columnas de consulta_aperturas para que coincida con los de la consulta
+consulta_aperturas.rename(columns={'COD_ELEMENTO':'CODIGO',
+                                   'IDE_EVENTO':'Evento'},inplace=True)
+consulta_aperturas['DUR_H']=consulta_aperturas['DUR_H'].astype('float64')

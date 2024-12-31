@@ -244,36 +244,36 @@ def graficar_html(gdf,cortes,trafo,gdf2,corte2,trafo2,red_BT_result,graf_usuario
     
     def agregar_marcador(row, tipo, total_aperturas, total_tiempo,aperturas,horas, capa_entrada):
         """
-   Función que agrega marcadores a una capa de mapa basándose en información específica del DataFrame.
+        Función que agrega marcadores a una capa de mapa basándose en información específica del DataFrame.
 
-   Parameters
-   ----------
-   row : pd.Series
-       Fila actual del DataFrame.
+        Parameters
+        ----------
+        row : pd.Series
+            Fila actual del DataFrame.
 
-   tipo : str
-       Tipo de marcador ('corte' o 'trafo').
+        tipo : str
+            Tipo de marcador ('corte' o 'trafo').
 
-   total_aperturas : int
-       Total de aperturas en el conjunto de datos.
+        total_aperturas : int
+            Total de aperturas en el conjunto de datos.
 
-   total_tiempo : float
-       Tiempo total en el conjunto de datos.
+        total_tiempo : float
+            Tiempo total en el conjunto de datos.
 
-   aperturas : str
-       Nombre de la columna que contiene la información de aperturas.
+        aperturas : str
+            Nombre de la columna que contiene la información de aperturas.
 
-   horas : str
-       Nombre de la columna que contiene la información de horas.
+        horas : str
+            Nombre de la columna que contiene la información de horas.
 
-   capa_entrada : folium.Map
-       Capa del mapa donde se agregarán los marcadores.
+        capa_entrada : folium.Map
+            Capa del mapa donde se agregarán los marcadores.
 
-   Returns
-   -------
-   capa_entrada : folium.Map
-       Capa del mapa actualizada con los nuevos marcadores.
-   """
+        Returns
+        -------
+        capa_entrada : folium.Map
+            Capa del mapa actualizada con los nuevos marcadores.
+        """
         punto = Point(row['COOR_GPS_LON'], row['COOR_GPS_LAT'])
         
        # Obtener la suma de aperturas y tiempo para el elemento actual

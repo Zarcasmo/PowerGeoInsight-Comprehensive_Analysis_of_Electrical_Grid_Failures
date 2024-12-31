@@ -1,4 +1,4 @@
-# Análisis de fallas 
+# PowerGeoInsight-Comprehensive Analysis of Electrical Grid Failures
 
 <!-- vscode-markdown-toc -->
 * 1. [Estructura del Proyecto](#EstructuradelProyecto)
