@@ -49,7 +49,7 @@ A continuación, se muestra un ejemplo del mapa, donde se visualiza un circuito 
 ### Figura 1: Ejemplo de visualización del mapa
 ![Alt text](references/Media/mapa_html.PNG)
 
-### 3. <a name='Objetivos'></a>Objetivos del Proyecto
+## 3. <a name='Objetivos'></a>Objetivos del Proyecto
 1. Proveer una herramienta versátil que permita analizar casos específicos en la red eléctrica, permtiiendo evaluar el desempeño de la red que alimenta transformadores, usuarios o elementos de corte especificos.
 2. Facilitar la identificación de los componentes con mayores índices de fallas en trayectorias eléctricas específicas.
 3. Ofrecer una visualización interactiva y detallada de los eventos de falla para respaldar decisiones informadas por parte de los operadores y gestores.
