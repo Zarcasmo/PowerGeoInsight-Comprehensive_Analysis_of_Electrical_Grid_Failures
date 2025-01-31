@@ -1,14 +1,22 @@
 # PowerGeoInsight-Comprehensive Analysis of Electrical Grid Failures
 
 <!-- vscode-markdown-toc -->
-* 1. [Estructura del Proyecto](#EstructuradelProyecto)
-* 2. [Instalación](#Instalacin)
-* 3. [Uso](#Uso)
-	* 3.1. [Entrada](#Entrada)
-	* 3.2. [Ejemplo](#Ejemplo)
-* 4. [Estructura del Código Fuente (src/)](#EstructuradelCdigoFuentesrc)
-* 5. [Información Adicional](#InformacinAdicional)
-* 6. [Autor](#Autor)
+* 1. [Antecedentes](#Antecedentes)
+* 2. [Descripción](#Descripcion)
+* 3. [Objetivos del Proyecto](#Objetivos)
+* 4. [Estructura de los datos](#EstructuraDatos)
+* 5. [Resumen ejecutivo](#Resumen)
+* 6. [Perspectivas](#Perspectivas)
+* 7. [Recomendaciones](#Recomendaciones)
+* 8. [Tecnologias y flujos de trabajo](#Tech)
+* 9. [Estructura del proyecto](#EstructuradelProyecto)
+* 10. [Instalación](#Instalacin)
+* 11. [Uso](#Uso)
+	* 11.1. [Entrada](#Entrada)
+	* 11.2. [Ejemplo](#Ejemplo)
+* 12. [Estructura del Código Fuente (src/)](#EstructuradelCdigoFuentesrc)
+* 13. [Información Adicional](#InformacinAdicional)
+* 14. [Autor](#Autor)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -16,6 +24,14 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
+## 1. <a name='Antecedentes'></a>Antecedentes
+
+El proyecto **PowerGeoInsight** nace en el contexto de la industria de distribución eléctrica en Colombia, específicamente en la empresa EDEQ, parte del Grupo EPM. EDEQ opera en el Eje Cafetero, una región caracterizada por su topografía desafiante y sus estrictas exigencias en términos de confiabilidad del servicio eléctrico. 
+
+### Contexto
+La red eléctrica de distribución enfrenta retos constantes, como el impacto de condiciones climáticas adversas, problemas de mantenimiento y el envejecimiento de los activos. Estas situaciones generan interrupciones en el servicio que afectan tanto a usuarios residenciales como industriales, con consecuencias económicas negativas por la interrupción del servicio.
+
+## 2. <a name='Descripcion'></a>Descripción 
 
 Este proyecto se enfoca en identificar los componentes que han experimentado más fallas a lo largo de una red de distribución de energía. Esto se logra analizando los componentes que se extienden desde el punto de análisis hasta la subestación eléctrica que los alimenta. Para alcanzar este objetivo, se emplea una combinación de datos obtenidos de la base de datos y reportes de eventos del SCADA del sistema de distribución. Esta información se presenta de manera interactiva en un mapa utilizando la librería Folium.
 
@@ -33,7 +49,92 @@ A continuación, se muestra un ejemplo del mapa, donde se visualiza un circuito 
 ### Figura 1: Ejemplo de visualización del mapa
 ![Alt text](references/Media/mapa_html.PNG)
 
-##  1. <a name='EstructuradelProyecto'></a>Estructura del Proyecto
+### 3. <a name='Objetivos'></a>Objetivos del Proyecto
+1. Proveer una herramienta versátil que permita analizar casos específicos en la red eléctrica, permtiiendo evaluar el desempeño de la red que alimenta transformadores, usuarios o elementos de corte especificos.
+2. Facilitar la identificación de los componentes con mayores índices de fallas en trayectorias eléctricas específicas.
+3. Ofrecer una visualización interactiva y detallada de los eventos de falla para respaldar decisiones informadas por parte de los operadores y gestores.
+
+---
+
+## 4. <a name='EstructuraDatos'></a>Estructura de los datos
+
+El conjunto de datos utilizado en este proyecto se organiza en diferentes capas de información, integradas a través de un modelo digital geoespacial. La estructura principal incluye:
+
+- **Datos de Fallas:** Información recopilada del SCADA sobre eventos registrados en los elementos de la red que han fallado.
+- **Geometría de la Red:** Representación geoespacial de los tramos de red eléctrica, incluyendo transformadores, elementos de corte y subestaciones.
+- **Atributos de Activos:** Información técnica y operativa sobre cada componente de la red.
+- **Eventos de Usuario:** Registros asociados a quejas y reportes de usuarios específicos.
+
+La base de datos está estructurada de la siguiente manera:
+
+| **Nombre**          | **Descripción**                                      |
+|-----------------------|------------------------------------------------------|
+| `ID_Activo`          | Identificador único del activo en la red.            |
+| `Tipo_Activo`        | Categoría del activo (transformador, elemento de corte, etc.).    |
+| `Coordenadas`        | Ubicación geográfica (latitud, longitud).             |
+| `Fecha_Evento`       | Fecha y hora del evento registrado.                   |
+| `Causa_Falla`        | Clasificación de la falla (clima, técnico, etc.).     |
+| `Duración_Falla`     | Tiempo de interrupción del servicio (en minutos).     |
+| `Frecuencia_Falla`   | Número de fallas acumuladas en un periodo definido.   |
+
+---
+
+## 5. <a name='Resumen'></a>Resumen ejecutivo
+
+El programa desarrollado es una herramienta dinámica y personalizable que permite a los usuarios analizar casos específicos dentro de la red de distribución eléctrica de EDEQ. Su principal objetivo es brindar información detallada sobre los elementos de red que mas han fallado, facilitando la toma de decisiones informadas.
+
+Algunos aspectos destacados del programa incluyen:
+
+- **Capacidad de Análisis:** El usuario puede seleccionar transformadores, usuarios o elementos de corte específicos para identificar los componentes con mayores índices de fallas en sus trayectorias eléctricas.
+- **Visualización Interactiva:** Los mapas generados permiten explorar detalladamente la red y comprender la relación entre los eventos de falla y su localización geográfica.
+- **Soporte a la Decisión:** Proporciona la información necesaria para planificar mantenimientos, priorizar intervenciones y optimizar recursos.
+
+En este sentido, la herramienta no busca proporcionar conclusiones directas, sino habilitar a los usuarios para realizar análisis profundos y tomar decisiones adaptadas a cada caso particular.
+
+---
+
+## 6. <a name='Perspectivas'></a>Perspectivas
+
+### Flexibilidad en el Análisis
+El programa permite que los usuarios adapten el análisis a sus necesidades específicas. Por ejemplo:
+- Al validar un transformador especifico, el programa muestra cuáles son los elementos en su trayectoria que han fallado más veces y cómo estos fallos impactan el circuito.
+- En el caso de un usuario específico, se puede identificar de manera precisa la relación entre las fallas del sistema y la experiencia del usuario.
+
+### Visualización Detallada
+El uso de mapas interactivos con Folium permite al usuario explorar:
+- Rutas críticas dentro de los circuitos y la frecuencia de fallas en cada elemento.
+- Información clave representada con indicadores de color y tamaño, que simplifican la interpretación de los datos.
+
+### Uso de Datos en Tiempo Real
+El análisis considera eventos registrados en el SCADA y otros sistemas de monitoreo, lo que garantiza que las decisiones se basen en información actualizada y relevante.
+
+---
+
+## 7. <a name='Recomendaciones'></a>Recommendaciones
+
+Para maximizar el impacto del programa, se sugieren los siguientes pasos:
+
+1. **Capacitación del Personal:** Entrenar a los operadores en el uso de la herramienta para aprovechar su flexibilidad y funcionalidad.
+2. **Integración Continua:** Incorporar más fuentes de datos, como dispositivos IoT para enriquecer los análisis.
+3. **Monitoreo Activo:** Utilizar la herramienta regularmente para identificar patrones emergentes en las fallas y actuar de manera proactiva.
+
+
+## 8. <a name='Tech'></a>Tecnologias y flujos de trabajo
+
+### Tecnologías Utilizadas
+- **Lenguaje de Programación:** Python.
+- **Bibliotecas Clave:** Pandas, Folium, Geopandas.
+- **Base de Datos:** SCADA, conexiones a bases de datos, archivos CSV y Excel
+
+### Flujo de Trabajo
+1. **Carga de Datos:** Importación desde archivos CSV o conexión a bases de datos.
+2. **Procesamiento:** Limpieza y filtrado de datos para estructurar la información de interés.
+3. **Análisis:** Identificación de fallas mediante algoritmos específicos.
+4. **Visualización:** Generación de mapas HTML interactivos con información relevante.
+5. **Salida:** Exportación de reportes en formato Excel y mapas listos para consulta.
+
+
+##  9. <a name='EstructuradelProyecto'></a>Estructura del Proyecto
 1. **project_root**: Directorio principal del proyecto.
     - **data**: Contiene los conjuntos de datos.
         - **raw**: Datos sin procesar (Originales).
@@ -41,6 +142,7 @@ A continuación, se muestra un ejemplo del mapa, donde se visualiza un circuito 
     - **references**: Manuales y material explicatorio.
         - **structure proyect**: Estructrua general del proyecto en archivo plano.
         - **requirements.txt:**: Lista de dependencias del proyecto, .py que permite instalar las librerias en la versión adecuada para ejecutar el proyecto de manera adecuada.
+        - **Manual_de_usuario**: Manua de uso en español.
     - **src**: Código fuente del proyecto.
         - `Main_analisis_falla.py:` Script principal para ejecutar el proyecto.
         - **data** 
@@ -54,7 +156,7 @@ A continuación, se muestra un ejemplo del mapa, donde se visualiza un circuito 
     - **README.md:** Documentación principal del proyecto.
 
 
-##  2. <a name='Instalacin'></a>Instalación
+##  10. <a name='Instalacin'></a>Instalación
 Para comenzar a utilizar este proyecto, sigue estos pasos:
 
 1. **Clona el repositorio:**
@@ -93,8 +195,8 @@ Para comenzar a utilizar este proyecto, sigue estos pasos:
      pip install -r requirements.txt
      ```
 
-##  3. <a name='Uso'></a>Uso
-###  3.1. <a name='Entrada'></a>Entrada
+##  11. <a name='Uso'></a>Uso
+###  11.1. <a name='Entrada'></a>Entrada
 - **`Entrada por consola`**
   1. Ejecutar el script principal `Main_analisis_falla.py` 
   2. Ahora se le pide que ingrese un valor.
@@ -145,7 +247,7 @@ Para comenzar a utilizar este proyecto, sigue estos pasos:
         Procesando un archivo excel
         ```     
 
-###  3.2. <a name='Ejemplo'></a>Ejemplo
+###  11.2. <a name='Ejemplo'></a>Ejemplo
 - **`Entrada:`** Se tiene un conjunto de transformadores en un archivo xlsx.
 
     ![Alt text](references/Media/ejemplo1.PNG)
@@ -179,7 +281,7 @@ Para comenzar a utilizar este proyecto, sigue estos pasos:
     ![Alt text](references/Media/mapa_ejemplo.PNG)
 
 
-##  4. <a name='EstructuradelCdigoFuentesrc'></a>Estructura del Código Fuente (src/)
+##  12. <a name='EstructuradelCdigoFuentesrc'></a>Estructura del Código Fuente (src/)
 1. **__init__.py:** Archivo de inicialización del paquete.
    - Este archivo se utiliza para que Python reconozca las carpetas como un módulo del paquete. No contiene código específico ni funcionalidades adicionales.
 
@@ -225,11 +327,11 @@ Para comenzar a utilizar este proyecto, sigue estos pasos:
         - **mapa HTML:** Bloque de código para agregar las capas al mapa interactivo, incluir control de capas, guardar el mapa como un archivo HTML en la carpeta `../reports/` y abrirlo en el navegador web.
 
 
-##  5. <a name='InformacinAdicional'></a>Información Adicional
+##  13. <a name='InformacinAdicional'></a>Información Adicional
 - [Documentación oficial de Folium](https://python-visualization.github.io/folium/)
 - [Guía de Markdown de GitHub](https://docs.github.com/es/github/writing-on-github/basic-writing-and-formatting-syntax)
 
 
-##  6. <a name='Autor'></a>Autor
+##  14. <a name='Autor'></a>Autor
  - Andrea Bartolo Guarin - andrea.bartolo@utp.edu.co
  - Alejandro López Aguirre - alejo97100@utp.edu.co
